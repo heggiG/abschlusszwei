@@ -1,4 +1,4 @@
-package cardgame.core;
+package cardgame.card;
 
 /**
  * Interface to implement for the building cards

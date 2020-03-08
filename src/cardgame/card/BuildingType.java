@@ -1,4 +1,4 @@
-package cardgame.core;
+package cardgame.card;
 
 /**
  * Enum that implements all buildable cards
@@ -11,49 +11,49 @@ public enum BuildingType implements BuildingCard {
     /**
      * The axe card
      */
-    AXE("axe", new CardType[] { CardType.METAL, CardType.METAL, CardType.METAL }),
+    AXE("axe", new DrawableType[] { DrawableType.METAL, DrawableType.METAL, DrawableType.METAL }),
 
     /**
      * The club card
      */
-    CLUB("club", new CardType[] { CardType.WOOD, CardType.WOOD, CardType.WOOD }),
+    CLUB("club", new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD }),
 
     /**
      * The shack card
      */
-    SHACK("shack", new CardType[] { CardType.WOOD, CardType.WOOD, CardType.METAL, CardType.PLASTIC, CardType.PLASTIC }),
+    SHACK("shack", new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL, DrawableType.PLASTIC, DrawableType.PLASTIC }),
 
     /**
      * The fireplace card
      */
-    FIREPLACE("fireplace", new CardType[] { CardType.WOOD, CardType.WOOD, CardType.WOOD, CardType.METAL }),
+    FIREPLACE("fireplace", new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL }),
 
     /**
      * The sailingraft card
      */
     SAILINGRAFT("sailingraft",
-            new CardType[] { CardType.WOOD, CardType.WOOD, CardType.WOOD, CardType.WOOD, CardType.METAL, CardType.METAL,
-                    CardType.PLASTIC, CardType.PLASTIC }),
+            new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL, DrawableType.METAL,
+                    DrawableType.PLASTIC, DrawableType.PLASTIC }),
 
     /**
      * The hangglider card
      */
     HANGGLIDER("hangglider",
-            new CardType[] { CardType.WOOD, CardType.WOOD, CardType.METAL, CardType.METAL, CardType.PLASTIC,
-                    CardType.PLASTIC, CardType.PLASTIC, CardType.PLASTIC }),
+            new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL, DrawableType.METAL, DrawableType.PLASTIC,
+                    DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC }),
 
     /**
      * The steamboat card
      */
     STEAMBOAT("steamboat",
-            new CardType[] { CardType.METAL, CardType.METAL, CardType.METAL, CardType.METAL, CardType.METAL,
-                    CardType.METAL, CardType.PLASTIC }),
+            new DrawableType[] { DrawableType.METAL, DrawableType.METAL, DrawableType.METAL, DrawableType.METAL, DrawableType.METAL,
+                    DrawableType.METAL, DrawableType.PLASTIC }),
 
     /**
      * The ballon card
      */
-    BALLON("ballon", new CardType[] { CardType.METAL, CardType.PLASTIC, CardType.PLASTIC, CardType.PLASTIC,
-            CardType.PLASTIC, CardType.PLASTIC, CardType.PLASTIC });
+    BALLON("ballon", new DrawableType[] { DrawableType.METAL, DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC,
+            DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC });
 
     private final DrawableCard[] cost;
     private final String type;
