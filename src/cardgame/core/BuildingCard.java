@@ -1,11 +1,24 @@
 package cardgame.core;
 
-import java.util.Map;
-
+/**
+ * Interface to implement for the building cards
+ * 
+ * @author Florian Heck
+ * @version 1.0
+ */
 public interface BuildingCard {
 
-    public BuildingType getType();
-    
-    public Map<CardType, Integer> cost();
-    
+    /**
+     * 
+     * @return a string that is the type of buildable card
+     */
+    String getType();
+
+    /**
+     * 
+     * @return an array containing an amount of drawn cards that are required to
+     *         build a buildable card
+     */
+    DrawableCard[] getCost();
+
 }
