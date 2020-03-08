@@ -98,7 +98,7 @@ public enum DrawableType implements DrawableCard {
      */
     @Override
     public int getDieSize() {
-        return dieSize;
+        return this.dieSize;
     }
 
     /**
@@ -106,7 +106,7 @@ public enum DrawableType implements DrawableCard {
      */
     @Override
     public int getEyeCount() {
-        return eyeCount;
+        return this.eyeCount;
     }
     
     @Override
