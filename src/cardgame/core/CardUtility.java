@@ -29,8 +29,10 @@ public class CardUtility {
      */
     public static final int CATASTROPHE_AMOUNT = 1;
 
+    /**
+     * Private utility class constructor
+     */
     private CardUtility() {
-        // private utility class constructor
     }
 
     /**

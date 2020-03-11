@@ -140,7 +140,7 @@ public enum Commands {
     /**
      * Quits the user interaction
      */
-    public void quit() {
+    protected void quit() {
         running = false;
     }
 }
