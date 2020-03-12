@@ -11,7 +11,7 @@ import edu.kit.informatik.Terminal;
 public class Main {
 
     /**
-     * Utility main class
+     * Private main class constructor
      */
     private Main() {
         
