@@ -79,6 +79,7 @@ public enum BuildingType implements BuildingCard {
     public DrawableCard[] getCost() {
         return this.cost;
     }
+    
 
     @Override
     public String toString() {

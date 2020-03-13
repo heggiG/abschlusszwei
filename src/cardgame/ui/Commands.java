@@ -2,8 +2,9 @@ package cardgame.ui;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import cardgame.core.Model;
+import cardgame.core.GameSystem;
+import cardgame.exceptions.InputException;
+import edu.kit.informatik.Terminal;
 
 /**
  * Enum that handles the user input
@@ -18,7 +19,7 @@ public enum Commands {
      */
     START("start") {
         @Override
-        public void execute(Matcher match, String input) {
+        public void run(Matcher match, GameSystem gs) {
             
         }
     }, 
@@ -28,8 +29,10 @@ public enum Commands {
      */
     DRAW("draw") {
         @Override
-        public void execute(Matcher match, String input) {
-            
+        public void run(Matcher match, GameSystem gs) throws InputException {
+            if (!gs.getCurrentState().isExpected(this)) {
+                throw new InputException("unexpected command for current game state");
+            }
         }
     }, 
     
@@ -38,8 +41,8 @@ public enum Commands {
      */
     LISTRESOURCES("list-resources") {
         @Override
-        public void execute(Matcher match, String input) {
-            
+        public void run(Matcher match, GameSystem gs) {
+           
         }
     }, 
     
@@ -48,8 +51,10 @@ public enum Commands {
      */
     BUILD("") {
         @Override
-        public void execute(Matcher match, String input) {
-            
+        public void run(Matcher match, GameSystem gs) throws InputException {
+            if (!gs.getCurrentState().isExpected(this)) {
+                throw new InputException("unexpected command for current game state");
+            }
         }
     },
     
@@ -58,7 +63,7 @@ public enum Commands {
      */
     LISTBUILDINGS("list-buildings") {
         @Override
-        public void execute(Matcher match, String input) {
+        public void run(Matcher match, GameSystem gs) {
             
         }
     },
@@ -68,7 +73,7 @@ public enum Commands {
      */
     BUILDABLE("build\\?") {
         @Override
-        public void execute(Matcher match, String input) {
+        public void run(Matcher match, GameSystem gs) {
             
         }
     },
@@ -76,10 +81,13 @@ public enum Commands {
     /**
      * The rolldx command
      */
-    ROLLDX("rollD[468] \\d+") {
+    ROLLDX("rollD[468] ([+-]?\\d+)") {
         @Override
-        public void execute(Matcher match, String input) {
-            
+        public void run(Matcher match, GameSystem gs) throws InputException {
+            if (!gs.getCurrentState().isExpected(this)) {
+                throw new InputException("unexpected command for current game state");
+            }
+            int thrown = Integer.parseInt(match.group(1));
         }  
     },
     
@@ -88,7 +96,7 @@ public enum Commands {
      */
     RESET("reset") {
         @Override
-        public void execute(Matcher match, String input) {
+        public void run(Matcher match, GameSystem gs) {
             
         }
     }, 
@@ -98,7 +106,7 @@ public enum Commands {
      */
     QUIT("quit") {
         @Override
-        public void execute(Matcher match, String input) {
+        public void run(Matcher match, GameSystem gs) {
             quit();
         }
     };
@@ -111,11 +119,18 @@ public enum Commands {
         running = true;
     }
 
-    public static Commands runFitting(Model model, String input) {
+    /**
+     * Finds the fitting command and executes it
+     * @param gamesys The gamesystem to operate on
+     * @param input the user input
+     * @return The found command
+     * @throws InputException If the input dosen't fit the expected one
+     */
+    public static Commands runFitting(GameSystem gamesys, String input) throws InputException {
         for (Commands comm : Commands.values()) {
             Matcher match = comm.pattern.matcher(input);
             if (match.matches()) {
-                comm.execute(match, input);
+                comm.run(match, gamesys);
                 return comm;
             }
         }
@@ -125,9 +140,10 @@ public enum Commands {
     /**
      * Executes the command
      * @param match The regex Matcher
-     * @param command The user input
+     * @param gs The gamesystem to operate on
+     * @throws InputException if the input dosen't match the expected
      */
-    public abstract void execute(Matcher match, String command);
+    public abstract void run(Matcher match, GameSystem gs) throws InputException;
     
     /**
      * 

@@ -25,4 +25,8 @@ public class Model {
             }
         }
     }
+    
+    public void draw() {
+        
+    }
 }

@@ -23,8 +23,8 @@ public enum GameState {
     
     public boolean isExpected(Commands input) {
         if (input == Commands.LISTRESOURCES || input == Commands.LISTBUILDINGS) {
-            return true;
-        } else if (input == Commands.START || input == Commands.BUILDABLE) {
+            return true; //splitted for readability
+        } else if (input == Commands.START || input == Commands.BUILDABLE || input == Commands.RESET) {
             return true;
         } else {
             for (Commands comm : expectedInput) {

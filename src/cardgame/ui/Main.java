@@ -1,10 +1,12 @@
 package cardgame.ui;
 
-import cardgame.core.Model;
+import cardgame.core.GameSystem;
+import cardgame.exceptions.InputException;
 import edu.kit.informatik.Terminal;
 
 /**
  * The cardgames Main class
+ * 
  * @author Florian Heck
  * @version 1.0
  */
@@ -14,20 +16,24 @@ public class Main {
      * Private main class constructor
      */
     private Main() {
-        
+
     }
-    
+
     /**
      * Main method
+     * 
      * @param args Commandline arguments
      */
     public static void main(String[] args) {
-        Model model = new Model();
-        Commands command;
-        
+        GameSystem model = new GameSystem();
+        Commands command = null;
         do {
-            command = Commands.runFitting(model, Terminal.readLine());
-        } while(command == null || command.isRunning());
+            try {
+                command = Commands.runFitting(model, Terminal.readLine());
+            } catch (InputException e) {
+                Terminal.printError(e.getMessage());
+            }
+        } while (command == null || command.isRunning());
     }
 
 }

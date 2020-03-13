@@ -2,28 +2,28 @@ package cardgame.core;
 
 import java.util.ArrayList;
 import java.util.Deque;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 import cardgame.card.BuildingCard;
 import cardgame.card.BuildingType;
 import cardgame.card.DrawableCard;
 import cardgame.exceptions.GameException;
+import cardgame.ui.GameState;
 
 public class Hand {
 
-    private Set<BuildingCard> buildings;
+    private Deque<BuildingCard> buildings;
     private Deque<DrawableCard> drawnCards;
 
     public Hand() {
-        buildings = new HashSet<>();
+        buildings = new LinkedList<>();
         drawnCards = new LinkedList<>();
     }
 
-    public void addDrawnCard(DrawableCard dc) {
+    public GameState addDrawnCard(DrawableCard dc) {
         drawnCards.add(dc);
+        return dc.getFollowingState();
     }
 
     public Iterator<DrawableCard> listResource() {
@@ -78,4 +78,8 @@ public class Hand {
         return ret;
     }
 
+    
+    public Iterator<BuildingCard> listBuildings() {
+        return buildings.descendingIterator();
+    }
 }

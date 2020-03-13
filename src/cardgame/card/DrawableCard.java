@@ -1,5 +1,7 @@
 package cardgame.card;
 
+import cardgame.ui.GameState;
+
 /**
  * Interface to implement for all needed drawable card methods
  * @author Florian Heck
@@ -8,13 +10,13 @@ package cardgame.card;
 public interface DrawableCard {
     
     /**
-     * 
+     * TODO maybe unnecessary?
      * @return the cards type (wood, metal...)
      */
     String getType();
     
     /**
-     * 
+     * TODO maybe unnecessary?
      * @return the cards group (resource, animal or catastrophe)
      */
     String getCategory();
@@ -31,4 +33,9 @@ public interface DrawableCard {
      */
     int getEyeCount();
     
+    /**
+     * 
+     * @return the games state that follows a drawn card
+     */
+    GameState getFollowingState();
 }
