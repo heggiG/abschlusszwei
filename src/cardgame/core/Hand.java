@@ -88,7 +88,7 @@ public class Hand {
      */
     public void loseCards() {
         if (buildings.contains(BuildingType.SHACK)) {
-            Iterator<BuildingCard> iter = buildings.descendingIterator();
+            Iterator<DrawableCard> iter = drawnCards.descendingIterator();
             int i = 0;
             while (iter.hasNext()) {
                 iter.next();
