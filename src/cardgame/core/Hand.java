@@ -82,4 +82,22 @@ public class Hand {
     public Iterator<BuildingCard> listBuildings() {
         return buildings.descendingIterator();
     }
+    
+    /**
+     * Removes all cards if an encounter has been lost, or a catastrophe occurs
+     */
+    public void loseCards() {
+        if (buildings.contains(BuildingType.SHACK)) {
+            Iterator<BuildingCard> iter = buildings.descendingIterator();
+            int i = 0;
+            while (iter.hasNext()) {
+                iter.next();
+                if (i >= 5) {
+                    iter.remove();
+                }
+            }
+        } else {
+            drawnCards.clear();
+        }
+    }
 }

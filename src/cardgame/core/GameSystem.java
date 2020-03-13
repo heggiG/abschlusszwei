@@ -23,7 +23,9 @@ public class GameSystem {
     }
     
     public void encounter(int thrown) {
-        
+        if (thrown <= lastDrawn.getEyeCount()) {
+            
+        }
     }
     
     public void newGame() {
