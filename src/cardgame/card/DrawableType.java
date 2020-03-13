@@ -13,58 +13,57 @@ public enum DrawableType implements DrawableCard {
     /**
      * The wood resource card
      */
-    WOOD("resource", "wood", GameState.SCAVENGE),
+    WOOD(DrawableCard.Category.RESOURCE, "wood", GameState.SCAVENGE),
 
     /**
      * The metal resource card
      */
-    METAL("resource", "metal", GameState.SCAVENGE),
+    METAL(DrawableCard.Category.RESOURCE, "metal", GameState.SCAVENGE),
 
     /**
      * The plastic resource card
      */
-    PLASTIC("resource", "plastic", GameState.SCAVENGE),
+    PLASTIC(DrawableCard.Category.RESOURCE, "plastic", GameState.SCAVENGE),
 
     /**
      * The spider animal card
      */
-    SPIDER("animal", "spider", 4, 2, GameState.ENCOUNTER),
+    SPIDER(DrawableCard.Category.ANIMAL, "spider", 4, 2, GameState.ENCOUNTER),
 
     /**
      * The spider animal card
      */
-    SNAKE("animal", "snake", 6, 4, GameState.ENCOUNTER),
+    SNAKE(DrawableCard.Category.ANIMAL, "snake", 6, 4, GameState.ENCOUNTER),
 
     /**
      * The tiger animal card
      */
-    TIGER("animal", "tiger", 8, 6, GameState.ENCOUNTER),
+    TIGER(DrawableCard.Category.ANIMAL, "tiger", 8, 6, GameState.ENCOUNTER),
 
     /**
      * The thunderstorm catastrophe card
      */
-    THUNDERSTORM("catastrophe", "thunderstorm", 5, GameState.SCAVENGE);
-
-    private final String category;
+    THUNDERSTORM(DrawableCard.Category.CATASTROPHE, "thunderstorm", GameState.SCAVENGE);
+    
+    private final DrawableCard.Category category;
     private final String type;
     private final int dieSize;
     private final int eyeCount;
     private final GameState following;
-    private final int destroys;
 
     /**
      * Constructor that sets the cards category and the cards type
      * 
      * @param category The cards category (resource, animal or catastrophe)
      * @param type     The cards type (instance)
+     * @param following The gamestate that follows after this card is drawn
      */
-    private DrawableType(String category, String type, GameState following) {
+    private DrawableType(DrawableCard.Category category, String type, GameState following) {
         this.category = category;
         this.type = type;
         this.dieSize = 0;
         this.eyeCount = 0;
         this.following = following;
-        this.destroys = 0;
     }
 
     /**
@@ -75,23 +74,14 @@ public enum DrawableType implements DrawableCard {
      * @param type     The cards type
      * @param dieSize  The die size rolled in an encounter
      * @param eyeCount The eye count needed to survive
+     * @param following The gamestate that follows after
      */
-    private DrawableType(String category, String type, int dieSize, int eyeCount, GameState following) {
+    private DrawableType(DrawableCard.Category category, String type, int dieSize, int eyeCount, GameState following) {
         this.category = category;
         this.type = type;
         this.dieSize = dieSize;
         this.eyeCount = eyeCount;
         this.following = following;
-        this.destroys = 0;
-    }
-    
-    private DrawableType(String category, String type, int destroys, GameState following) {
-        this.category = category;
-        this.type = type;
-        this.dieSize = 0;
-        this.eyeCount = 0;
-        this.following = following;
-        this.destroys = destroys;
     }
 
     @Override
@@ -100,7 +90,7 @@ public enum DrawableType implements DrawableCard {
     }
 
     @Override
-    public String getCategory() {
+    public DrawableCard.Category getCategory() {
         return this.category;
     }
 

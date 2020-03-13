@@ -57,6 +57,7 @@ public enum BuildingType implements BuildingCard {
 
     private final DrawableCard[] cost;
     private final String type;
+    private final int bonus;
 
     /**
      * Constructor that sets the cards type string and an array containing all cards
@@ -65,11 +66,22 @@ public enum BuildingType implements BuildingCard {
      * @param type The cards type
      * @param cost An array of cards needed to build this card
      */
+    private BuildingType(String type, int bonus, DrawableCard[] cost) {
+        this.cost = cost;
+        this.type = type;
+        this.bonus = bonus;
+    }
+
     private BuildingType(String type, DrawableCard[] cost) {
         this.cost = cost;
         this.type = type;
+        this.bonus = 0;
     }
-
+    
+    public int getBonus() {
+        return bonus;
+    }
+    
     @Override
     public String getType() {
         return this.type;

@@ -2,7 +2,7 @@ package cardgame.ui;
 
 public enum GameState {
 
-    SCAVENGE(new Commands[] {Commands.BUILD, Commands.DRAW, Commands.BUILD}),
+    SCAVENGE(new Commands[] {Commands.BUILD, Commands.DRAW}),
 
     ENCOUNTER(new Commands[] {Commands.ROLLDX}),
 

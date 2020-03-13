@@ -20,5 +20,11 @@ public interface BuildingCard {
      *         build a buildable card
      */
     DrawableCard[] getCost();
+    
+    /**
+     * 
+     * @return the bonus this card gives in case of an encounter, if any
+     */
+    int getBonus();
 
 }

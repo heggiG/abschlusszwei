@@ -2,7 +2,9 @@ package cardgame.ui;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import cardgame.card.BuildingCard;
 import cardgame.core.GameSystem;
+import cardgame.exceptions.GameException;
 import cardgame.exceptions.InputException;
 import edu.kit.informatik.Terminal;
 
@@ -33,6 +35,11 @@ public enum Commands {
             if (!gs.getCurrentState().isExpected(this)) {
                 throw new InputException("unexpected command for current game state");
             }
+            try {
+                Terminal.printLine(gs.draw());
+            } catch (GameException e) {
+                Terminal.printError(e.getMessage());
+            }
         }
     }, 
     
@@ -49,7 +56,7 @@ public enum Commands {
     /**
      * The build command
      */
-    BUILD("") {
+    BUILD("build (" + Commands.BUILDABLES + ")") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
             if (!gs.getCurrentState().isExpected(this)) {
@@ -74,20 +81,32 @@ public enum Commands {
     BUILDABLE("build\\?") {
         @Override
         public void run(Matcher match, GameSystem gs) {
-            
+            if (gs.buildable().isEmpty()) {
+                Terminal.printLine("EMPTY");
+            } else {
+                for (BuildingCard bc : gs.buildable()) {
+                    Terminal.printLine(bc);
+                }
+            }
         }
     },
     
     /**
      * The rolldx command
      */
-    ROLLDX("rollD[468] ([+-]?\\d+)") {
+    ROLLDX("rollD([468]) ([+-]?\\d+)") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
             if (!gs.getCurrentState().isExpected(this)) {
                 throw new InputException("unexpected command for current game state");
             }
-            int thrown = Integer.parseInt(match.group(1));
+            int dieSize = Integer.parseInt(match.group(1));
+            int thrown = Integer.parseInt(match.group(2));
+            try {
+                gs.encounter(dieSize, thrown);
+            } catch (GameException e) {
+                Terminal.printError(e.getMessage());
+            }
         }  
     },
     
@@ -97,7 +116,8 @@ public enum Commands {
     RESET("reset") {
         @Override
         public void run(Matcher match, GameSystem gs) {
-            
+            gs.reset();
+            Terminal.printLine("OK");
         }
     }, 
     
@@ -111,6 +131,7 @@ public enum Commands {
         }
     };
 
+    private static final String BUILDABLES = "axe|club|shack|fireplace|sailingraft|hangglider|steamboat|ballon";
     private Pattern pattern;
     private boolean running;
     

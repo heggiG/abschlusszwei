@@ -32,6 +32,14 @@ public class Hand {
         }
         return drawnCards.descendingIterator();
     }
+    
+    /**
+     * 
+     * @return returns the highest bonus from built tools
+     */
+    public int getBonus() {
+        return buildings.stream().mapToInt(t -> t.getBonus()).max().getAsInt();
+    }
 
     /**
      * 
