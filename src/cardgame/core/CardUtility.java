@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import cardgame.card.*;
+import cardgame.exceptions.InputException;
 
 /**
  * Utility class that provide some set up functionality
@@ -29,6 +30,11 @@ public class CardUtility {
      */
     public static final int CATASTROPHE_AMOUNT = 1;
 
+    /**
+     * Total card amount
+     */
+    public static final int CARD_AMOUNT = 64;
+    
     /**
      * Private utility class constructor
      */
@@ -58,4 +64,82 @@ public class CardUtility {
         return stack;
     }
 
+    /**
+     * Returns an array of drawable cards from the start command
+     * @param input The list of cards as a string
+     * @return The array of drawable cards
+     * @throws InputException If the input dosent match the tasks parameters
+     */
+    public static DrawableCard[] getStartInput(String input) throws InputException {
+        DrawableCard[] ret = new DrawableCard[CARD_AMOUNT];
+        if (input.split(",").length != CARD_AMOUNT) {
+            throw new InputException("Wrong amount of cards");
+        }
+        for (int i = 0; i < CARD_AMOUNT; i++) {
+            switch (input.split(",")[i]) {
+            case "wood":
+                ret[i] = DrawableType.WOOD;
+                break;
+                
+            case "metal":
+                ret[i] = DrawableType.METAL;
+                break;
+                
+            case "plastic":
+                ret[i] = DrawableType.PLASTIC;
+                break;
+                
+            case "snake":
+                ret[i] = DrawableType.SNAKE;
+                break;
+                
+            case "spider":
+                ret[i] = DrawableType.SPIDER;
+                break;
+                
+            case "tiger":
+                ret[i] = DrawableType.TIGER;
+                break;
+                
+            case "thunderstorm":
+                ret[i] = DrawableType.THUNDERSTORM;
+                break;
+                
+                default:
+                    throw new InputException(i + " is an unknown card");
+            }       
+        }
+        return ret;
+    }
+    
+    public static BuildingCard getFromString(String input) throws InputException {
+        switch (input) {
+            case "axe":
+                return BuildingType.AXE;
+                
+            case "club":
+                return BuildingType.CLUB;
+                
+            case "shack":
+                return BuildingType.SHACK;
+                
+            case "fireplace":
+                return BuildingType.FIREPLACE;
+                
+            case "sailingraft":
+                return BuildingType.SAILINGRAFT;
+                
+            case "hangglider":
+                return BuildingType.HANGGLIDER;
+                
+            case "steamboat":
+                return BuildingType.STEAMBOAT;
+                
+            case "ballon":
+                return BuildingType.BALLON;
+            
+            default:
+                throw new InputException("input is not a buildable card");
+        }
+    }
 }

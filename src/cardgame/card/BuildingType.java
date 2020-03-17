@@ -92,6 +92,30 @@ public enum BuildingType implements BuildingCard {
         return this.cost;
     }
     
+    @Override
+    public boolean isShack() {
+        if (this == BuildingType.SHACK) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean isWinningCard() {
+        if (this == BuildingType.STEAMBOAT || this == BuildingType.BALLON) {
+            return true;
+        }
+        return false;
+    }
+    
+    @Override
+    public boolean triggersEndeavor() {
+        if (this == BuildingType.HANGGLIDER || this == BuildingType.SAILINGRAFT) {
+            return true;
+        }
+        return false;
+    }
+    
 
     @Override
     public String toString() {

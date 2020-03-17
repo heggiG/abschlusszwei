@@ -1,8 +1,11 @@
 package cardgame.ui;
 
+import java.util.Iterator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import cardgame.card.BuildingCard;
+import cardgame.card.DrawableCard;
+import cardgame.core.CardUtility;
 import cardgame.core.GameSystem;
 import cardgame.exceptions.GameException;
 import cardgame.exceptions.InputException;
@@ -19,13 +22,22 @@ public enum Commands {
     /**
      * The start command
      */
-    START("start") {
+    START("start (" + Commands.DRAWABLES + ",?){64}") {
         @Override
-        public void run(Matcher match, GameSystem gs) {
-            
+        public void run(Matcher match, GameSystem gs) throws InputException {
+            if (!gs.getCurrentState().isExpected(this)) {
+                throw new InputException("unexpected command for current game state");
+            }
+            try {
+                initialInput = CardUtility.getStartInput(match.group(1));
+                gs.newGame(initialInput);
+                Terminal.printLine("OK");
+            } catch (InputException e) {
+                Terminal.printError(e.getMessage());
+            }
         }
-    }, 
-    
+    },
+
     /**
      * The draw command
      */
@@ -41,18 +53,21 @@ public enum Commands {
                 Terminal.printError(e.getMessage());
             }
         }
-    }, 
-    
+    },
+
     /**
      * The list-resources command
      */
     LISTRESOURCES("list-resources") {
         @Override
         public void run(Matcher match, GameSystem gs) {
-           
+            Iterator<DrawableCard> iter = gs.listResources();
+            while (iter.hasNext()) {
+                Terminal.printLine(iter.next().getType());
+            }
         }
-    }, 
-    
+    },
+
     /**
      * The build command
      */
@@ -61,20 +76,40 @@ public enum Commands {
         public void run(Matcher match, GameSystem gs) throws InputException {
             if (!gs.getCurrentState().isExpected(this)) {
                 throw new InputException("unexpected command for current game state");
+            } else {
+                try {
+                    BuildingCard toBuild = CardUtility.getFromString(match.group(1));
+                    if (gs.build(toBuild)) {
+                        if (gs.getCurrentState() == GameState.SCAVENGE || gs.getCurrentState() == GameState.ENDEAVOR) {
+                            Terminal.printLine("OK");
+                        } else if (gs.getCurrentState() == GameState.END) {
+                            Terminal.printLine("win");
+                        }
+                    } else {
+                        Terminal.printError("can't build card");
+                    }
+                } catch (InputException e) {
+                    Terminal.printError(e.getMessage());
+                } catch (GameException e) {
+                    Terminal.printError(e.getMessage());
+                }
             }
         }
     },
-    
+
     /**
      * The list-buildings command
      */
     LISTBUILDINGS("list-buildings") {
         @Override
         public void run(Matcher match, GameSystem gs) {
-            
+            Iterator<BuildingCard> iter = gs.listBuildings();
+            while (iter.hasNext()) {
+                Terminal.printLine(iter.next().getType());
+            }
         }
     },
-    
+
     /**
      * The build? command
      */
@@ -90,7 +125,7 @@ public enum Commands {
             }
         }
     },
-    
+
     /**
      * The rolldx command
      */
@@ -107,20 +142,20 @@ public enum Commands {
             } catch (GameException e) {
                 Terminal.printError(e.getMessage());
             }
-        }  
+        }
     },
-    
+
     /**
      * The reset command
      */
     RESET("reset") {
         @Override
         public void run(Matcher match, GameSystem gs) {
-            gs.reset();
+            gs.newGame(initialInput);
             Terminal.printLine("OK");
         }
-    }, 
-    
+    },
+
     /**
      * The quit command
      */
@@ -132,9 +167,11 @@ public enum Commands {
     };
 
     private static final String BUILDABLES = "axe|club|shack|fireplace|sailingraft|hangglider|steamboat|ballon";
+    private static final String DRAWABLES = "wood|metal|plastic|spide|snake|tiger|thunderstorm";
+    private static DrawableCard[] initialInput;
     private Pattern pattern;
     private boolean running;
-    
+
     private Commands(String regex) {
         pattern = Pattern.compile(regex);
         running = true;
@@ -142,8 +179,9 @@ public enum Commands {
 
     /**
      * Finds the fitting command and executes it
+     * 
      * @param gamesys The gamesystem to operate on
-     * @param input the user input
+     * @param input   the user input
      * @return The found command
      * @throws InputException If the input dosen't fit the expected one
      */
@@ -157,15 +195,16 @@ public enum Commands {
         }
         return null;
     }
-    
+
     /**
      * Executes the command
+     * 
      * @param match The regex Matcher
-     * @param gs The gamesystem to operate on
+     * @param gs    The gamesystem to operate on
      * @throws InputException if the input dosen't match the expected
      */
     public abstract void run(Matcher match, GameSystem gs) throws InputException;
-    
+
     /**
      * 
      * @return Whether the interaction is still running
@@ -173,7 +212,7 @@ public enum Commands {
     public boolean isRunning() {
         return running;
     }
-    
+
     /**
      * Quits the user interaction
      */

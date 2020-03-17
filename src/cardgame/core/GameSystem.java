@@ -17,6 +17,7 @@ public class GameSystem {
     public GameSystem() {
         hand = new Hand();
         cardStack = new CardStack();
+        currentState = GameState.END;
     }
     
     public DrawableCard draw() throws GameException {
@@ -43,7 +44,7 @@ public class GameSystem {
         }
     }
     
-    public void newGame() {
+    public void newGame(DrawableCard[] input) {
         hand = new Hand();
         cardStack = new CardStack();
     }
@@ -67,5 +68,21 @@ public class GameSystem {
     
     public List<BuildingCard> buildable() {
         return hand.buildable();
+    }
+    
+    public boolean build(BuildingCard toBuild) throws GameException {
+        if (hand.build(toBuild)) {
+            if (toBuild.isWinningCard()) {
+                currentState = GameState.END;
+                return true;
+            } else if (toBuild.triggersEndeavor()) { 
+               currentState = GameState.ENDEAVOR;
+               return true;
+            } else {
+                return true;
+            }
+        } else {
+            return false;
+        }
     }
 }

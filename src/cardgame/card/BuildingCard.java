@@ -9,6 +9,11 @@ package cardgame.card;
 public interface BuildingCard {
 
     /**
+     * The amount of cards saved by a shack
+     */
+    public static final int SHACK_SAVINGS = 5;
+    
+    /**
      * 
      * @return a string that is the type of buildable card
      */
@@ -26,5 +31,23 @@ public interface BuildingCard {
      * @return the bonus this card gives in case of an encounter, if any
      */
     int getBonus();
+    
+    /**
+     * 
+     * @return wether this card is a hut or nut
+     */
+    boolean isShack();
+    
+    /**
+     * 
+     * @return whether this card will win the game
+     */
+    boolean isWinningCard();
+    
+    /**
+     * 
+     * @return whether this card triggers an endeavor
+     */
+    boolean triggersEndeavor();
 
 }

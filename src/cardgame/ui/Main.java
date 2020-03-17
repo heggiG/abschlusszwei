@@ -25,11 +25,11 @@ public class Main {
      * @param args Commandline arguments
      */
     public static void main(String[] args) {
-        GameSystem model = new GameSystem();
+        GameSystem gameSystem = new GameSystem();
         Commands command = null;
         do {
             try {
-                command = Commands.runFitting(model, Terminal.readLine());
+                command = Commands.runFitting(gameSystem, Terminal.readLine());
             } catch (InputException e) {
                 Terminal.printError(e.getMessage());
             }

@@ -32,13 +32,13 @@ public class Hand {
         }
         return drawnCards.descendingIterator();
     }
-    
+
     /**
      * 
      * @return returns the highest bonus from built tools
      */
     public int getBonus() {
-        return buildings.stream().mapToInt(t -> t.getBonus()).max().getAsInt();
+        return buildings.stream().mapToInt(built -> built.getBonus()).max().getAsInt();
     }
 
     /**
@@ -47,18 +47,17 @@ public class Hand {
      * @return true, if the card has been built, false if it can't be
      */
     public boolean build(BuildingCard toBuild) throws GameException {
-        if ((toBuild == BuildingType.BALLON || toBuild == BuildingType.STEAMBOAT)
-                && !buildings.contains(BuildingType.FIREPLACE)) {
+        if (toBuild.isWinningCard() && !buildings.contains(BuildingType.FIREPLACE)) {
             throw new GameException("need to build a fireplace first");
         }
-        if (!buildable().contains(toBuild)) {
-            return false;
+        if (buildable().contains(toBuild)) {
+            for (DrawableCard dc : toBuild.getCost()) {
+                drawnCards.removeFirstOccurrence(dc);
+            }
+            buildings.add(toBuild);
+            return true;
         }
-        for (DrawableCard dc : toBuild.getCost()) {
-            drawnCards.removeFirstOccurrence(dc);
-        }
-        buildings.add(toBuild);
-        return true;
+        return false;
     }
 
     /**
@@ -69,7 +68,7 @@ public class Hand {
         List<BuildingCard> ret = new ArrayList<>();
         for (BuildingCard toBuild : BuildingType.values()) {
             boolean buildable = false;
-            Deque<DrawableCard> toCheck = new LinkedList<>(drawnCards); //copy the hands cards
+            Deque<DrawableCard> toCheck = new LinkedList<>(drawnCards); // copy the hands cards
             for (DrawableCard dc : toBuild.getCost()) {
                 if (toCheck.contains(dc)) {
                     toCheck.removeFirstOccurrence(dc);
@@ -80,32 +79,41 @@ public class Hand {
                 }
             }
             if (buildable) {
-                ret.add(toBuild);
+                if (!buildings.contains(toBuild)) {
+                    ret.add(toBuild);
+                }
             }
-        }  
+        }
         return ret;
     }
 
-    
     public Iterator<BuildingCard> listBuildings() {
         return buildings.descendingIterator();
     }
-    
+
     /**
      * Removes all cards if an encounter has been lost, or a catastrophe occurs
      */
     public void loseCards() {
-        if (buildings.contains(BuildingType.SHACK)) {
+        if (containsShack()) {
             Iterator<DrawableCard> iter = drawnCards.descendingIterator();
             int i = 0;
             while (iter.hasNext()) {
                 iter.next();
-                if (i >= 5) {
+                if (i >= BuildingCard.SHACK_SAVINGS) {
                     iter.remove();
                 }
             }
         } else {
             drawnCards.clear();
         }
+    }
+
+    /**
+     * 
+     * @return whether a shack has been built
+     */
+    public boolean containsShack() {
+        return buildings.stream().anyMatch(card -> card.isShack());
     }
 }
