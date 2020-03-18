@@ -13,18 +13,18 @@ import cardgame.exceptions.InputException;
  * @version 1.0
  */
 
-public class CardUtility { 
+public class CardUtility {
 
     /**
      * The amount of resource cards in the deck
      */
     public static final int RESOURCE_AMOUNT = 16;
-    
+
     /**
      * The amount of each animal in the deck
      */
     public static final int ANIMAL_AMOUNT = 6;
-    
+
     /**
      * The amount of each catastrophe in the deck
      */
@@ -34,7 +34,7 @@ public class CardUtility {
      * Total card amount
      */
     public static final int CARD_AMOUNT = 64;
-    
+
     /**
      * Private utility class constructor
      */
@@ -66,6 +66,7 @@ public class CardUtility {
 
     /**
      * Returns an array of drawable cards from the start command
+     * 
      * @param input The list of cards as a string
      * @return The array of drawable cards
      * @throws InputException If the input dosent match the tasks parameters
@@ -80,66 +81,51 @@ public class CardUtility {
             case "wood":
                 ret[i] = DrawableType.WOOD;
                 break;
-                
+
             case "metal":
                 ret[i] = DrawableType.METAL;
                 break;
-                
+
             case "plastic":
                 ret[i] = DrawableType.PLASTIC;
                 break;
-                
+
             case "snake":
                 ret[i] = DrawableType.SNAKE;
                 break;
-                
+
             case "spider":
                 ret[i] = DrawableType.SPIDER;
                 break;
-                
+
             case "tiger":
                 ret[i] = DrawableType.TIGER;
                 break;
-                
+
             case "thunderstorm":
                 ret[i] = DrawableType.THUNDERSTORM;
                 break;
-                
-                default:
-                    throw new InputException(i + " is an unknown card");
-            }       
+
+            default:
+                throw new InputException(i + " is an unknown card");
+            }
         }
         return ret;
     }
-    
+
+    /**
+     * Returns a building card from an input string
+     * 
+     * @param input The input string
+     * @return The building card that fits the name
+     * @throws InputException
+     */
     public static BuildingCard getFromString(String input) throws InputException {
-        switch (input) {
-            case "axe":
-                return BuildingType.AXE;
-                
-            case "club":
-                return BuildingType.CLUB;
-                
-            case "shack":
-                return BuildingType.SHACK;
-                
-            case "fireplace":
-                return BuildingType.FIREPLACE;
-                
-            case "sailingraft":
-                return BuildingType.SAILINGRAFT;
-                
-            case "hangglider":
-                return BuildingType.HANGGLIDER;
-                
-            case "steamboat":
-                return BuildingType.STEAMBOAT;
-                
-            case "ballon":
-                return BuildingType.BALLON;
-            
-            default:
-                throw new InputException("input is not a buildable card");
+        for (BuildingCard bc : BuildingType.values()) {
+            if (bc.getType().equals(input)) {
+                return bc;
+            }
         }
+        throw new InputException("non existing card");
     }
 }
