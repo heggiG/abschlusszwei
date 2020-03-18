@@ -14,6 +14,16 @@ public interface BuildingCard {
     public static final int SHACK_SAVINGS = 5;
     
     /**
+     * The die size that needs to be thrown in an endeavor
+     */
+    public static final int DIE_SIZE_ENDEAVOR = 6;
+    
+    /**
+     * The eye count needed to win in an endeavor (greater than / equal to)
+     */
+    public static final int EYE_COUNT_ENDEAVOR = 4;
+    
+    /**
      * 
      * @return a string that is the type of buildable card
      */

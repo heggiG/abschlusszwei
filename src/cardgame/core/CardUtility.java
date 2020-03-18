@@ -12,7 +12,6 @@ import cardgame.exceptions.InputException;
  * @author Florian Heck
  * @version 1.0
  */
-
 public class CardUtility {
 
     /**

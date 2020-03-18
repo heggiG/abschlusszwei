@@ -15,18 +15,26 @@ public enum GameState {
     ENDEAVOR(new Commands[] {Commands.ROLLDX}),
 
     END(new Commands[] {Commands.START});
-
-    // TODO maybe give the input command to see if they match?
+    
     private Commands[] expectedInput;
     
     private GameState(Commands[] expectedInput) {
         this.expectedInput = expectedInput;
     }
 
+    /**
+     * 
+     * @return An array of commands that are expected in this gamestate
+     */
     public Commands[] getExpectedInput() {
         return expectedInput;
     }
     
+    /**
+     * 
+     * @param input The command that has been triggered
+     * @return Whether the command is expected or not
+     */
     public boolean isExpected(Commands input) {
         if (input == Commands.LISTRESOURCES || input == Commands.LISTBUILDINGS) {
             return true; //splitted for readability

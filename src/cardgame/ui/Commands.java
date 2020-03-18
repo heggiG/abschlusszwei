@@ -21,8 +21,8 @@ public enum Commands {
 
     /**
      * The start command
-     */
-    START("start (" + Commands.DRAWABLES + ",?){64}") {
+     */ // 64 cards and 63 commas
+    START("start ((" + Commands.DRAWABLES + "|,){127})") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
             if (!gs.getCurrentState().isExpected(this)) {
@@ -60,10 +60,14 @@ public enum Commands {
      */
     LISTRESOURCES("list-resources") {
         @Override
-        public void run(Matcher match, GameSystem gs) {
+        public void run(Matcher match, GameSystem gs) throws InputException {
             Iterator<DrawableCard> iter = gs.listResources();
-            while (iter.hasNext()) {
-                Terminal.printLine(iter.next().getType());
+            if (iter == null) {
+                Terminal.printLine("EMPTY");
+            } else {
+                while (iter.hasNext()) {
+                    Terminal.printLine(iter.next().getType());
+                }
             }
         }
     },
@@ -104,8 +108,12 @@ public enum Commands {
         @Override
         public void run(Matcher match, GameSystem gs) {
             Iterator<BuildingCard> iter = gs.listBuildings();
-            while (iter.hasNext()) {
-                Terminal.printLine(iter.next().getType());
+            if (iter == null) {
+                Terminal.printLine("EMPTY");
+            } else {
+                while (iter.hasNext()) {
+                    Terminal.printLine(iter.next().getType());
+                }
             }
         }
     },
@@ -129,7 +137,7 @@ public enum Commands {
     /**
      * The rolldx command
      */
-    ROLLDX("rollD([468]) ([+-]?\\d+)") {
+    ROLLDX("rollD(\\+?0*[468]) ([+-]?\\d+)") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
             if (!gs.getCurrentState().isExpected(this)) {
@@ -138,7 +146,19 @@ public enum Commands {
             int dieSize = Integer.parseInt(match.group(1));
             int thrown = Integer.parseInt(match.group(2));
             try {
-                gs.encounter(dieSize, thrown);
+                if (gs.getCurrentState() == GameState.ENCOUNTER) {
+                    if (gs.dieThrow(dieSize, thrown)) {
+                        Terminal.printLine("survived");
+                    } else {
+                        Terminal.printLine("lose");
+                    }
+                } else if (gs.getCurrentState() == GameState.ENDEAVOR) {
+                    if (gs.dieThrow(dieSize, thrown)) {
+                        Terminal.printLine("win");
+                    } else {
+                        Terminal.printLine("lose");
+                    }
+                }
             } catch (GameException e) {
                 Terminal.printError(e.getMessage());
             }
@@ -167,7 +187,7 @@ public enum Commands {
     };
 
     private static final String BUILDABLES = "axe|club|shack|fireplace|sailingraft|hangglider|steamboat|ballon";
-    private static final String DRAWABLES = "wood|metal|plastic|spide|snake|tiger|thunderstorm";
+    private static final String DRAWABLES = "wood|metal|plastic|spider|snake|tiger|thunderstorm";
     private static DrawableCard[] initialInput;
     private Pattern pattern;
     private boolean running;

@@ -11,6 +11,11 @@ import cardgame.card.DrawableCard;
 import cardgame.exceptions.GameException;
 import cardgame.ui.GameState;
 
+/**
+ * Class that implements your "hand" of drawn and built cards
+ * @author Florian
+ *
+ */
 public class Hand {
 
     private Deque<BuildingCard> buildings;
@@ -19,6 +24,10 @@ public class Hand {
     public Hand() {
         buildings = new LinkedList<>();
         drawnCards = new LinkedList<>();
+    }
+    
+    public BuildingCard getLastBuilt() {
+        return buildings.getLast();
     }
 
     public GameState addDrawnCard(DrawableCard dc) {
@@ -31,6 +40,13 @@ public class Hand {
             return null;
         }
         return drawnCards.descendingIterator();
+    }
+
+    public Iterator<BuildingCard> listBuildings() {
+        if (buildings.isEmpty()) {
+            return null;
+        }
+        return buildings.descendingIterator();
     }
 
     /**
@@ -79,16 +95,12 @@ public class Hand {
                 }
             }
             if (buildable) {
-                if (!buildings.contains(toBuild)) {
+                if (!buildings.contains(toBuild)) { //cards can only be built once
                     ret.add(toBuild);
                 }
             }
         }
         return ret;
-    }
-
-    public Iterator<BuildingCard> listBuildings() {
-        return buildings.descendingIterator();
     }
 
     /**

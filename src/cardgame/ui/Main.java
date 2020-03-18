@@ -30,6 +30,9 @@ public class Main {
         do {
             try {
                 command = Commands.runFitting(gameSystem, Terminal.readLine());
+                if (command == null) {
+                    Terminal.printError("unknown command");
+                }
             } catch (InputException e) {
                 Terminal.printError(e.getMessage());
             }
