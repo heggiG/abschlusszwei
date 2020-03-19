@@ -6,6 +6,7 @@ import java.util.regex.Pattern;
 import cardgame.card.BuildingCard;
 import cardgame.card.DrawableCard;
 import cardgame.core.CardUtility;
+import cardgame.core.GameState;
 import cardgame.core.GameSystem;
 import cardgame.exceptions.GameException;
 import cardgame.exceptions.InputException;
@@ -31,7 +32,7 @@ public enum Commands {
             try {
                 initialInput = CardUtility.getStartInput(match.group(1));
                 gs.newGame(initialInput);
-                Terminal.printLine("OK");
+                Terminal.printLine("OK"); //TODO keine karten mehr übrig
             } catch (InputException e) {
                 Terminal.printError(e.getMessage());
             }
@@ -48,7 +49,7 @@ public enum Commands {
                 throw new InputException("unexpected command for current game state");
             }
             try {
-                Terminal.printLine(gs.draw());
+                Terminal.printLine(gs.draw().getType());
             } catch (GameException e) {
                 Terminal.printError(e.getMessage());
             }

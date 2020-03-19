@@ -11,29 +11,23 @@ public enum BuildingType implements BuildingCard {
     /**
      * The axe card
      */
-    AXE("axe", new DrawableType[] { DrawableType.METAL, DrawableType.METAL, DrawableType.METAL }),
+    AXE("axe", 2, new DrawableType[] { DrawableType.METAL, DrawableType.METAL, DrawableType.METAL }),
+
+    /**
+     * The ballon card
+     */
+    BALLON("ballon", new DrawableType[] { DrawableType.WOOD, DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC,
+            DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC }),
 
     /**
      * The club card
      */
-    CLUB("club", new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD }),
-
-    /**
-     * The shack card
-     */
-    SHACK("shack", new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL, DrawableType.PLASTIC, DrawableType.PLASTIC }),
+    CLUB("club", 1, new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD }),
 
     /**
      * The fireplace card
      */
     FIREPLACE("fireplace", new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL }),
-
-    /**
-     * The sailingraft card
-     */
-    SAILINGRAFT("sailingraft",
-            new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL, DrawableType.METAL,
-                    DrawableType.PLASTIC, DrawableType.PLASTIC }),
 
     /**
      * The hangglider card
@@ -43,17 +37,23 @@ public enum BuildingType implements BuildingCard {
                     DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC }),
 
     /**
+     * The sailingraft card
+     */
+    SAILINGRAFT("sailingraft",
+            new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL, DrawableType.METAL,
+                    DrawableType.PLASTIC, DrawableType.PLASTIC }),
+
+    /**
+     * The shack card
+     */
+    SHACK("shack", new DrawableType[] { DrawableType.WOOD, DrawableType.WOOD, DrawableType.METAL, DrawableType.PLASTIC, DrawableType.PLASTIC }),
+
+    /**
      * The steamboat card
      */
     STEAMBOAT("steamboat",
             new DrawableType[] { DrawableType.METAL, DrawableType.METAL, DrawableType.METAL, DrawableType.METAL, DrawableType.METAL,
-                    DrawableType.METAL, DrawableType.PLASTIC }),
-
-    /**
-     * The ballon card
-     */
-    BALLON("ballon", new DrawableType[] { DrawableType.METAL, DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC,
-            DrawableType.PLASTIC, DrawableType.PLASTIC, DrawableType.PLASTIC });
+                    DrawableType.METAL, DrawableType.PLASTIC });
 
     private final DrawableCard[] cost;
     private final String type;
@@ -119,15 +119,6 @@ public enum BuildingType implements BuildingCard {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(type);
-        sb.append(": ");
-        for (int i = 0; i < type.length(); i++) {
-            if (i != 0) {
-                sb.append(",");
-            }
-            sb.append(cost[i].getType());
-        }
-        return sb.toString();
+        return this.type;
     }
 }

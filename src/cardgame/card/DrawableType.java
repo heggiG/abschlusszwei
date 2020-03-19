@@ -1,6 +1,6 @@
 package cardgame.card;
 
-import cardgame.ui.GameState;
+import cardgame.core.GameState;
 
 /**
  * Enumeration that contains all possible drawable cards

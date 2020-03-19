@@ -9,7 +9,6 @@ import cardgame.card.BuildingCard;
 import cardgame.card.BuildingType;
 import cardgame.card.DrawableCard;
 import cardgame.exceptions.GameException;
-import cardgame.ui.GameState;
 
 /**
  * Class that implements your "hand" of drawn and built cards
@@ -39,7 +38,7 @@ public class Hand {
         if (drawnCards.isEmpty()) {
             return null;
         }
-        return drawnCards.descendingIterator();
+        return drawnCards.iterator();
     }
 
     public Iterator<BuildingCard> listBuildings() {
@@ -54,7 +53,7 @@ public class Hand {
      * @return returns the highest bonus from built tools
      */
     public int getBonus() {
-        return buildings.stream().mapToInt(built -> built.getBonus()).max().getAsInt();
+        return buildings.stream().mapToInt(built -> built.getBonus()).max().orElse(0);
     }
 
     /**

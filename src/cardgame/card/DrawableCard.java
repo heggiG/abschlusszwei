@@ -1,6 +1,6 @@
 package cardgame.card;
 
-import cardgame.ui.GameState;
+import cardgame.core.GameState;
 
 /**
  * Interface to implement for all needed drawable card methods

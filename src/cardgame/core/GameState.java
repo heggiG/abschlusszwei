@@ -1,4 +1,6 @@
-package cardgame.ui;
+package cardgame.core;
+
+import cardgame.ui.Commands;
 
 /**
  * Enumeration that models the games given gamestates, when to draw cards or when to attack...

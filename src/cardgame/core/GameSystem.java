@@ -5,7 +5,6 @@ import java.util.List;
 import cardgame.card.BuildingCard;
 import cardgame.card.DrawableCard;
 import cardgame.exceptions.GameException;
-import cardgame.ui.GameState;
 
 /**
  * Class that implements the game system
@@ -43,7 +42,7 @@ public class GameSystem {
      * @throws GameException
      */
     public boolean dieThrow(int dieSize, int thrown) throws GameException {
-        if (currentState != GameState.ENCOUNTER || currentState != GameState.ENDEAVOR) {
+        if (currentState != GameState.ENCOUNTER && currentState != GameState.ENDEAVOR) {
             throw new GameException("not in an encounter or endeavor");
         }
         if (currentState == GameState.ENCOUNTER) {
@@ -51,7 +50,7 @@ public class GameSystem {
                 throw new GameException("wrong die size, expected: " + lastDrawn.getDieSize());
             }
             currentState = GameState.SCAVENGE;
-            if (thrown <= lastDrawn.getEyeCount() - hand.getBonus()) {
+            if (lastDrawn.getEyeCount() > thrown + hand.getBonus()) {
                 hand.loseCards();
                 return false;
             } else {
@@ -77,7 +76,7 @@ public class GameSystem {
      */
     public void newGame(DrawableCard[] input) {
         hand = new Hand();
-        cardStack = new CardStack();
+        cardStack = new CardStack(input);
         currentState = GameState.SCAVENGE;
     }
 

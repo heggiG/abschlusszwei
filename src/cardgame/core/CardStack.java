@@ -1,11 +1,9 @@
 package cardgame.core;
 
-import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
-
 import cardgame.card.DrawableCard;
 
 /**
@@ -24,6 +22,10 @@ public class CardStack {
         cardStack = new LinkedList<>();
     }
     
+    public CardStack(DrawableCard[] setup) {
+        newGame(setup);
+    }
+    
     /**
      * Resets the cardstack
      */
@@ -33,7 +35,7 @@ public class CardStack {
     
     public void newGame(DrawableCard[] input) {
         List<DrawableCard> list = Arrays.asList(input);
-        cardStack = new ArrayDeque<DrawableCard>(list);
+        cardStack = new LinkedList<DrawableCard>(list);
     }
     
     /**
