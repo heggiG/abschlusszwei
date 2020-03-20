@@ -26,13 +26,10 @@ public enum Commands {
     START("start ((" + Commands.DRAWABLES + "|,){127})") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
-            if (!gs.getCurrentState().isExpected(this)) {
-                throw new InputException("unexpected command for current game state");
-            }
             try {
                 initialInput = CardUtility.getStartInput(match.group(1));
                 gs.newGame(initialInput);
-                Terminal.printLine("OK"); //TODO keine karten mehr übrig
+                Terminal.printLine("OK");
             } catch (InputException e) {
                 Terminal.printError(e.getMessage());
             }
@@ -45,11 +42,11 @@ public enum Commands {
     DRAW("draw") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
-            if (!gs.getCurrentState().isExpected(this)) {
-                throw new InputException("unexpected command for current game state");
-            }
             try {
                 Terminal.printLine(gs.draw().getType());
+                if (!gs.cardsLeft() && !gs.canBuildWinningCard()) {
+                    Terminal.printLine("lost");
+                }
             } catch (GameException e) {
                 Terminal.printError(e.getMessage());
             }
@@ -79,26 +76,23 @@ public enum Commands {
     BUILD("build (" + Commands.BUILDABLES + ")") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
-            if (!gs.getCurrentState().isExpected(this)) {
-                throw new InputException("unexpected command for current game state");
-            } else {
-                try {
-                    BuildingCard toBuild = CardUtility.getFromString(match.group(1));
-                    if (gs.build(toBuild)) {
-                        if (gs.getCurrentState() == GameState.SCAVENGE || gs.getCurrentState() == GameState.ENDEAVOR) {
-                            Terminal.printLine("OK");
-                        } else if (gs.getCurrentState() == GameState.END) {
-                            Terminal.printLine("win");
-                        }
-                    } else {
-                        Terminal.printError("can't build card");
+            try {
+                BuildingCard toBuild = CardUtility.getFromString(match.group(1));
+                if (gs.build(toBuild)) {
+                    if (gs.getCurrentState() == GameState.SCAVENGE || gs.getCurrentState() == GameState.ENDEAVOR) {
+                        Terminal.printLine("OK");
+                    } else if (gs.getCurrentState() == GameState.END) {
+                        Terminal.printLine("win");
                     }
-                } catch (InputException e) {
-                    Terminal.printError(e.getMessage());
-                } catch (GameException e) {
-                    Terminal.printError(e.getMessage());
+                } else {
+                    Terminal.printError("can't build card");
                 }
+            } catch (InputException e) {
+                Terminal.printError(e.getMessage());
+            } catch (GameException e) {
+                Terminal.printError(e.getMessage());
             }
+
         }
     },
 
@@ -141,9 +135,6 @@ public enum Commands {
     ROLLDX("rollD(\\+?0*[468]) ([+-]?\\d+)") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
-            if (!gs.getCurrentState().isExpected(this)) {
-                throw new InputException("unexpected command for current game state");
-            }
             int dieSize = Integer.parseInt(match.group(1));
             int thrown = Integer.parseInt(match.group(2));
             try {
@@ -210,6 +201,9 @@ public enum Commands {
         for (Commands comm : Commands.values()) {
             Matcher match = comm.pattern.matcher(input);
             if (match.matches()) {
+                if (!gamesys.getCurrentState().isExpected(comm)) {
+                    throw new InputException("unexpected command for current game state");
+                }
                 comm.run(match, gamesys);
                 return comm;
             }

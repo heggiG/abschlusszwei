@@ -22,7 +22,7 @@ public class CardUtility {
     /**
      * The amount of each animal in the deck
      */
-    public static final int ANIMAL_AMOUNT = 6;
+    public static final int ANIMAL_AMOUNT = 5;
 
     /**
      * The amount of each catastrophe in the deck
@@ -76,37 +76,27 @@ public class CardUtility {
             throw new InputException("Wrong amount of cards");
         }
         for (int i = 0; i < CARD_AMOUNT; i++) {
-            switch (input.split(",")[i]) {
-            case "wood":
-                ret[i] = DrawableType.WOOD;
-                break;
-
-            case "metal":
-                ret[i] = DrawableType.METAL;
-                break;
-
-            case "plastic":
-                ret[i] = DrawableType.PLASTIC;
-                break;
-
-            case "snake":
-                ret[i] = DrawableType.SNAKE;
-                break;
-
-            case "spider":
-                ret[i] = DrawableType.SPIDER;
-                break;
-
-            case "tiger":
-                ret[i] = DrawableType.TIGER;
-                break;
-
-            case "thunderstorm":
-                ret[i] = DrawableType.THUNDERSTORM;
-                break;
-
-            default:
-                throw new InputException(i + " is an unknown card");
+            ret[i] = getDrawableFromString(input.split(",")[i]);
+        }
+        for (DrawableCard dc : DrawableType.values()) {
+            int sum = 0;
+            for (DrawableCard toSum : ret) {
+                if (dc.equals(toSum)) {
+                    sum++;
+                }
+            }           //check amount of each card
+            if (dc.getCategory() == DrawableCard.Category.ANIMAL) {
+                if (sum != ANIMAL_AMOUNT) {
+                    throw new InputException("wrong amount of " + dc.getType());
+                }
+            } else if (dc.getCategory() == DrawableCard.Category.RESOURCE) {
+                if (sum != RESOURCE_AMOUNT) {
+                    throw new InputException("wrong amount of " + dc.getType());
+                }
+            } else {
+                if (sum != CATASTROPHE_AMOUNT) {
+                    throw new InputException("wrong amount of " + dc.getType());
+                }
             }
         }
         return ret;
@@ -116,7 +106,7 @@ public class CardUtility {
      * Returns a building card from an input string
      * 
      * @param input The input string
-     * @return The building card that fits the name
+     * @return The building card that fits the name, null if none are found
      * @throws InputException
      */
     public static BuildingCard getFromString(String input) throws InputException {
@@ -125,6 +115,15 @@ public class CardUtility {
                 return bc;
             }
         }
-        throw new InputException("non existing card");
+        throw new InputException("none existing card");
+    }
+    
+    private static DrawableCard getDrawableFromString(String input) {
+        for (DrawableCard dc : DrawableType.values()) {
+            if (dc.getType().equals(input)) {
+                return dc;
+            }
+        }
+        return null;
     }
 }

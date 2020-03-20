@@ -33,12 +33,12 @@ public enum DrawableType implements DrawableCard {
     /**
      * The spider animal card
      */
-    SNAKE(DrawableCard.Category.ANIMAL, "snake", 6, 4, GameState.ENCOUNTER),
+    SNAKE(DrawableCard.Category.ANIMAL, "snake", 6, 3, GameState.ENCOUNTER),
 
     /**
      * The tiger animal card
      */
-    TIGER(DrawableCard.Category.ANIMAL, "tiger", 8, 6, GameState.ENCOUNTER),
+    TIGER(DrawableCard.Category.ANIMAL, "tiger", 8, 4, GameState.ENCOUNTER),
 
     /**
      * The thunderstorm catastrophe card

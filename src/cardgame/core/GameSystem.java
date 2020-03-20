@@ -19,18 +19,32 @@ public class GameSystem {
     private Hand hand;
     private CardStack cardStack;
 
+    /**
+     * Constructor to set up the hand and cardstack and set the current state
+     */
     public GameSystem() {
         hand = new Hand();
         cardStack = new CardStack();
-        currentState = GameState.END;
+        currentState = GameState.NOT_STARTED;
     }
 
+    /**
+     * Draws a card from the cardstack
+     * @return The drawn card
+     * @throws GameException if the game is in the wrong state
+     */
     public DrawableCard draw() throws GameException {
         if (currentState != GameState.SCAVENGE) {
             throw new GameException("wrongs game state for command");
         }
         lastDrawn = cardStack.draw();
         currentState = hand.addDrawnCard(lastDrawn);
+        if (lastDrawn.getCategory() == DrawableCard.Category.CATASTROPHE) {
+            hand.loseCards();
+        }
+        if (!cardsLeft() && !canBuildWinningCard()) {
+            currentState = GameState.END;
+        }
         return lastDrawn;
     }
 
@@ -50,7 +64,7 @@ public class GameSystem {
                 throw new GameException("wrong die size, expected: " + lastDrawn.getDieSize());
             }
             currentState = GameState.SCAVENGE;
-            if (lastDrawn.getEyeCount() > thrown + hand.getBonus()) {
+            if (lastDrawn.getEyeCount() >= thrown + hand.getBonus()) {
                 hand.loseCards();
                 return false;
             } else {
@@ -141,5 +155,17 @@ public class GameSystem {
         } else {
             return false;
         }
+    }
+    
+    /**
+     * 
+     * @return true if cards are left on the stack, false if not
+     */
+    public boolean cardsLeft() {
+        return cardStack.cardsLeft();
+    }
+    
+    public boolean canBuildWinningCard() {
+        return hand.buildable().stream().anyMatch(card -> card.isWinningCard() || card.triggersEndeavor());
     }
 }

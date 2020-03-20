@@ -3,23 +3,39 @@ package cardgame.core;
 import cardgame.ui.Commands;
 
 /**
- * Enumeration that models the games given gamestates, when to draw cards or when to attack...
+ * Enumeration that models the games given gamestates, when to draw cards or
+ * when to attack...
  *
  * @author Florian Heck
  * @version 1.0
  */
 public enum GameState {
 
-    SCAVENGE(new Commands[] {Commands.BUILD, Commands.DRAW}),
+    /**
+     * The scavenge gamestate, where a player needs to draw cards or build
+     */
+    SCAVENGE(new Commands[] { Commands.BUILD, Commands.DRAW, Commands.LISTRESOURCES, Commands.LISTBUILDINGS,
+            Commands.BUILDABLE, Commands.RESET }),
 
-    ENCOUNTER(new Commands[] {Commands.ROLLDX}),
+    /**
+     * The encounter gamestate where a player needs to fend off animals
+     */
+    ENCOUNTER(new Commands[] { Commands.ROLLDX, Commands.LISTRESOURCES, Commands.LISTBUILDINGS, Commands.RESET }),
 
-    ENDEAVOR(new Commands[] {Commands.ROLLDX}),
+    /**
+     * The endeavor gamestate where a player needs to roll the dice to win the game
+     */
+    ENDEAVOR(new Commands[] { Commands.ROLLDX, Commands.LISTRESOURCES, Commands.LISTBUILDINGS, Commands.RESET }),
 
-    END(new Commands[] {Commands.START});
-    
+    /**
+     * 
+     */
+    END(new Commands[] { Commands.START, Commands.LISTRESOURCES, Commands.LISTBUILDINGS, Commands.RESET }),
+
+    NOT_STARTED(new Commands[] { Commands.START });
+
     private Commands[] expectedInput;
-    
+
     private GameState(Commands[] expectedInput) {
         this.expectedInput = expectedInput;
     }
@@ -31,16 +47,14 @@ public enum GameState {
     public Commands[] getExpectedInput() {
         return expectedInput;
     }
-    
+
     /**
      * 
      * @param input The command that has been triggered
      * @return Whether the command is expected or not
      */
     public boolean isExpected(Commands input) {
-        if (input == Commands.LISTRESOURCES || input == Commands.LISTBUILDINGS) {
-            return true; //splitted for readability
-        } else if (input == Commands.BUILDABLE || input == Commands.RESET) {
+        if (input == Commands.QUIT) {
             return true;
         } else {
             for (Commands comm : expectedInput) {
@@ -51,5 +65,5 @@ public enum GameState {
             return false;
         }
     }
-    
+
 }

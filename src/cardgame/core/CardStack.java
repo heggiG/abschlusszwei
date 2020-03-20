@@ -22,6 +22,10 @@ public class CardStack {
         cardStack = new LinkedList<>();
     }
     
+    /**
+     * Sets up the cardstack with an input stack
+     * @param setup The setup stack
+     */
     public CardStack(DrawableCard[] setup) {
         newGame(setup);
     }
@@ -33,6 +37,10 @@ public class CardStack {
         cardStack = new LinkedList<>(CardUtility.getNewStack());
     }
     
+    /**
+     * Starts a game from a given cardstack
+     * @param input The cardstack to initialize from
+     */
     public void newGame(DrawableCard[] input) {
         List<DrawableCard> list = Arrays.asList(input);
         cardStack = new LinkedList<DrawableCard>(list);
@@ -44,5 +52,9 @@ public class CardStack {
      */
     public DrawableCard draw() {
         return cardStack.pollFirst();
+    }
+    
+    public boolean cardsLeft() {
+        return !cardStack.isEmpty();
     }
 }

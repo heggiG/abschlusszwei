@@ -12,6 +12,7 @@ import cardgame.exceptions.GameException;
 
 /**
  * Class that implements your "hand" of drawn and built cards
+ * 
  * @author Florian
  *
  */
@@ -24,13 +25,15 @@ public class Hand {
         buildings = new LinkedList<>();
         drawnCards = new LinkedList<>();
     }
-    
+
     public BuildingCard getLastBuilt() {
         return buildings.getLast();
     }
 
     public GameState addDrawnCard(DrawableCard dc) {
-        drawnCards.add(dc);
+        if (dc.getCategory() == DrawableCard.Category.RESOURCE) {
+            drawnCards.add(dc);
+        }
         return dc.getFollowingState();
     }
 
@@ -94,7 +97,9 @@ public class Hand {
                 }
             }
             if (buildable) {
-                if (!buildings.contains(toBuild)) { //cards can only be built once
+                if (toBuild.isWinningCard() && !buildings.contains(BuildingType.FIREPLACE)) {
+                    continue;
+                } else if (!buildings.contains(toBuild)) { // cards can only be built once
                     ret.add(toBuild);
                 }
             }
@@ -110,10 +115,10 @@ public class Hand {
             Iterator<DrawableCard> iter = drawnCards.descendingIterator();
             int i = 0;
             while (iter.hasNext()) {
-                iter.next();
                 if (i >= BuildingCard.SHACK_SAVINGS) {
                     iter.remove();
                 }
+                iter.next();
             }
         } else {
             drawnCards.clear();
