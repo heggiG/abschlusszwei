@@ -54,6 +54,10 @@ public class CardStack {
         return cardStack.pollFirst();
     }
     
+    /**
+     * 
+     * @return whether there are cards left on the stack
+     */
     public boolean cardsLeft() {
         return !cardStack.isEmpty();
     }

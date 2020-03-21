@@ -22,7 +22,7 @@ public enum Commands {
 
     /**
      * The start command
-     */ // 64 cards and 63 commas
+     */                                 //64 cards and 63 commas
     START("start ((" + Commands.DRAWABLES + "|,){127})") {
         @Override
         public void run(Matcher match, GameSystem gs) throws InputException {
@@ -44,28 +44,11 @@ public enum Commands {
         public void run(Matcher match, GameSystem gs) throws InputException {
             try {
                 Terminal.printLine(gs.draw().getType());
-                if (!gs.cardsLeft() && !gs.canBuildWinningCard()) {
+                if (gs.gameLost()) {
                     Terminal.printLine("lost");
                 }
             } catch (GameException e) {
                 Terminal.printError(e.getMessage());
-            }
-        }
-    },
-
-    /**
-     * The list-resources command
-     */
-    LISTRESOURCES("list-resources") {
-        @Override
-        public void run(Matcher match, GameSystem gs) throws InputException {
-            Iterator<DrawableCard> iter = gs.listResources();
-            if (iter == null) {
-                Terminal.printLine("EMPTY");
-            } else {
-                while (iter.hasNext()) {
-                    Terminal.printLine(iter.next().getType());
-                }
             }
         }
     },
@@ -81,6 +64,9 @@ public enum Commands {
                 if (gs.build(toBuild)) {
                     if (gs.getCurrentState() == GameState.SCAVENGE || gs.getCurrentState() == GameState.ENDEAVOR) {
                         Terminal.printLine("OK");
+                        if (gs.gameLost()) {
+                            Terminal.printLine("lost");
+                        }
                     } else if (gs.getCurrentState() == GameState.END) {
                         Terminal.printLine("win");
                     }
@@ -93,6 +79,23 @@ public enum Commands {
                 Terminal.printError(e.getMessage());
             }
 
+        }
+    },
+    
+    /**
+     * The list-resources command
+     */
+    LISTRESOURCES("list-resources") {
+        @Override
+        public void run(Matcher match, GameSystem gs) throws InputException {
+            Iterator<DrawableCard> iter = gs.listResources();
+            if (iter == null) {
+                Terminal.printLine("EMPTY");
+            } else {
+                while (iter.hasNext()) {
+                    Terminal.printLine(iter.next().getType());
+                }
+            }
         }
     },
 
@@ -123,7 +126,7 @@ public enum Commands {
                 Terminal.printLine("EMPTY");
             } else {
                 for (BuildingCard bc : gs.buildable()) {
-                    Terminal.printLine(bc);
+                    Terminal.printLine(bc.getType());
                 }
             }
         }
@@ -137,6 +140,11 @@ public enum Commands {
         public void run(Matcher match, GameSystem gs) throws InputException {
             int dieSize = Integer.parseInt(match.group(1));
             int thrown = Integer.parseInt(match.group(2));
+            if (thrown > dieSize) {
+                throw new InputException("eye count greater then dice");
+            } else if (thrown <= 0) {
+                throw new InputException("no eye count less than 1");
+            }
             try {
                 if (gs.getCurrentState() == GameState.ENCOUNTER) {
                     if (gs.dieThrow(dieSize, thrown)) {
@@ -150,6 +158,9 @@ public enum Commands {
                     } else {
                         Terminal.printLine("lose");
                     }
+                }
+                if (gs.gameLost()) {
+                    Terminal.printLine("lost");
                 }
             } catch (GameException e) {
                 Terminal.printError(e.getMessage());

@@ -10,12 +10,30 @@ import cardgame.core.GameState;
  */
 public interface DrawableCard {
 
+    /**
+     * Enumeration that contains the different categories of the cards
+     * @author Florian Heck
+     * @version 1.0
+     */
     enum Category {
-        RESOURCE, ANIMAL, CATASTROPHE
+        
+        /**
+         * The resource category, from which you build stuff
+         */
+        RESOURCE,
+        
+        /**
+         * The animal category, which triggers an encounter
+         */
+        ANIMAL,
+        
+        /**
+         * The catastrophe category, which makes you lose cards
+         */
+        CATASTROPHE
     }
 
     /**
-     * TODO maybe unnecessary?
      * 
      * @return the cards type (wood, metal...)
      */

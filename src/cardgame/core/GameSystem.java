@@ -30,30 +30,30 @@ public class GameSystem {
 
     /**
      * Draws a card from the cardstack
+     * 
      * @return The drawn card
      * @throws GameException if the game is in the wrong state
      */
     public DrawableCard draw() throws GameException {
         if (currentState != GameState.SCAVENGE) {
-            throw new GameException("wrongs game state for command");
+            throw new GameException("wrong game state for command");
         }
         lastDrawn = cardStack.draw();
         currentState = hand.addDrawnCard(lastDrawn);
         if (lastDrawn.getCategory() == DrawableCard.Category.CATASTROPHE) {
             hand.loseCards();
-        }
-        if (!cardsLeft() && !canBuildWinningCard()) {
-            currentState = GameState.END;
+            hand.removeFirePlace();
         }
         return lastDrawn;
     }
 
     /**
      * Method to call when a die needs to be thrown in an encounter or endeavor
+     * 
      * @param dieSize The size of the thrown die
-     * @param thrown The amount thrown
+     * @param thrown  The amount thrown
      * @return True if the encounter / endeavor has succeeded, false if not
-     * @throws GameException
+     * @throws GameException if the gamestates do not match or the die size dosen't match
      */
     public boolean dieThrow(int dieSize, int thrown) throws GameException {
         if (currentState != GameState.ENCOUNTER && currentState != GameState.ENDEAVOR) {
@@ -75,6 +75,7 @@ public class GameSystem {
                 throw new GameException("wrong die size for endeavor, expected " + BuildingCard.DIE_SIZE_ENDEAVOR);
             }
             if (thrown < BuildingCard.EYE_COUNT_ENDEAVOR) {
+                currentState = GameState.SCAVENGE;
                 return false;
             } else {
                 currentState = GameState.END;
@@ -156,7 +157,7 @@ public class GameSystem {
             return false;
         }
     }
-    
+
     /**
      * 
      * @return true if cards are left on the stack, false if not
@@ -164,8 +165,30 @@ public class GameSystem {
     public boolean cardsLeft() {
         return cardStack.cardsLeft();
     }
-    
+
+    /**
+     * 
+     * @return whether you can build a card that can win the game, endeavor or direct win
+     */
     public boolean canBuildWinningCard() {
         return hand.buildable().stream().anyMatch(card -> card.isWinningCard() || card.triggersEndeavor());
+    }
+
+    /**
+     * 
+     * @return whether the game is lost or not
+     */
+    public boolean gameLost() {
+        if (currentState == GameState.ENCOUNTER) {
+            return false;
+        } else if (currentState == GameState.ENDEAVOR) {
+            return false;
+        } else if (currentState == GameState.SCAVENGE && !cardStack.cardsLeft() && !hand.buildable().isEmpty()) {
+            return false;
+        } else if (currentState != GameState.NOT_STARTED && !cardStack.cardsLeft() && hand.buildable().isEmpty()) {
+            currentState = GameState.END;
+            return true;
+        }
+        return false;
     }
 }

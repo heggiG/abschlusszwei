@@ -11,17 +11,17 @@ public interface BuildingCard {
     /**
      * The amount of cards saved by a shack
      */
-    public static final int SHACK_SAVINGS = 5;
+    int SHACK_SAVINGS = 5;
     
     /**
      * The die size that needs to be thrown in an endeavor
      */
-    public static final int DIE_SIZE_ENDEAVOR = 6;
+    int DIE_SIZE_ENDEAVOR = 6;
     
     /**
      * The eye count needed to win in an endeavor (greater than / equal to)
      */
-    public static final int EYE_COUNT_ENDEAVOR = 4;
+    int EYE_COUNT_ENDEAVOR = 4;
     
     /**
      * 

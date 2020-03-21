@@ -1,9 +1,9 @@
 package cardgame.exceptions;
 
 /**
- * Exception that indicates
- * @author Florian
- *
+ * Exception that indicates an error in the game has occured
+ * @author Florian Heck
+ * @version 1.0
  */
 public class GameException extends Exception {
     
@@ -22,6 +22,5 @@ public class GameException extends Exception {
      */
     public GameException(String s) {
         super(s);
-    }
-    
+    }   
 }

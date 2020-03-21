@@ -12,7 +12,7 @@ import cardgame.exceptions.InputException;
  * @author Florian Heck
  * @version 1.0
  */
-public class CardUtility {
+public final class CardUtility {
 
     /**
      * The amount of resource cards in the deck
@@ -41,6 +41,8 @@ public class CardUtility {
     }
 
     /**
+     * Method not used for the tests, but usefull if you want to play the game for
+     * real
      * 
      * @return a shuffled card deck
      */
@@ -79,12 +81,12 @@ public class CardUtility {
             ret[i] = getDrawableFromString(input.split(",")[i]);
         }
         for (DrawableCard dc : DrawableType.values()) {
-            int sum = 0;
+            int sum = 0; // amount of a single card
             for (DrawableCard toSum : ret) {
                 if (dc.equals(toSum)) {
                     sum++;
                 }
-            }           //check amount of each card
+            } // check amount of each card
             if (dc.getCategory() == DrawableCard.Category.ANIMAL) {
                 if (sum != ANIMAL_AMOUNT) {
                     throw new InputException("wrong amount of " + dc.getType());
@@ -107,7 +109,7 @@ public class CardUtility {
      * 
      * @param input The input string
      * @return The building card that fits the name, null if none are found
-     * @throws InputException
+     * @throws InputException if the input is not any of the existing building cards
      */
     public static BuildingCard getFromString(String input) throws InputException {
         for (BuildingCard bc : BuildingType.values()) {
@@ -117,7 +119,7 @@ public class CardUtility {
         }
         throw new InputException("none existing card");
     }
-    
+
     private static DrawableCard getDrawableFromString(String input) {
         for (DrawableCard dc : DrawableType.values()) {
             if (dc.getType().equals(input)) {

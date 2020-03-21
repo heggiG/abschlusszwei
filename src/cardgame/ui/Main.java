@@ -10,7 +10,7 @@ import edu.kit.informatik.Terminal;
  * @author Florian Heck
  * @version 1.0
  */
-public class Main {
+public final class Main {
 
     /**
      * Private main class constructor
