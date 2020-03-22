@@ -72,7 +72,7 @@ public final class CardUtility {
      * @return The array of drawable cards
      * @throws InputException If the input dosent match the tasks parameters
      */
-    public static DrawableCard[] getStartInput(String input) throws InputException {
+    public static DrawableCard[] getStartInput(final String input) throws InputException {
         DrawableCard[] ret = new DrawableCard[CARD_AMOUNT];
         if (input.split(",").length != CARD_AMOUNT) {
             throw new InputException("Wrong amount of cards");
@@ -111,7 +111,7 @@ public final class CardUtility {
      * @return The building card that fits the name, null if none are found
      * @throws InputException if the input is not any of the existing building cards
      */
-    public static BuildingCard getFromString(String input) throws InputException {
+    public static BuildingCard getFromString(final String input) throws InputException {
         for (BuildingCard bc : BuildingType.values()) {
             if (bc.getType().equals(input)) {
                 return bc;
@@ -120,7 +120,7 @@ public final class CardUtility {
         throw new InputException("none existing card");
     }
 
-    private static DrawableCard getDrawableFromString(String input) {
+    private static DrawableCard getDrawableFromString(final String input) {
         for (DrawableCard dc : DrawableType.values()) {
             if (dc.getType().equals(input)) {
                 return dc;

@@ -20,7 +20,7 @@ public class GameException extends Exception {
      * Exception constructor with detail message
      * @param s Detail message
      */
-    public GameException(String s) {
+    public GameException(final String s) {
         super(s);
     }   
 }

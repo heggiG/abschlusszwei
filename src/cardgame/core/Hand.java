@@ -30,21 +30,13 @@ public class Hand {
     }
 
     /**
-     * 
-     * @return the last built card
-     */
-    public BuildingCard getLastBuilt() {
-        return buildings.getLast();
-    }
-
-    /**
      * Adds a drawn card to the hand
      * 
      * @param dc The drawable card to add to your hand
      * @return The gamestate that follows this card
      * @throws GameException if null is given as parameter
      */
-    public GameState addDrawnCard(DrawableCard dc) throws GameException {
+    public GameState addDrawnCard(final DrawableCard dc) throws GameException {
         if (dc == null) {
             throw new GameException("no cards left");
         }
@@ -52,6 +44,89 @@ public class Hand {
             drawnCards.add(dc);
         }
         return dc.getFollowingState();
+    }
+
+    /**
+     * Builds a building card, if have the resources
+     * @param toBuild The card to build
+     * @return true, if the card has been built, false if it can't be
+     * @throws GameException if you need to build a fireplace first
+     */
+    public boolean build(final BuildingCard toBuild) throws GameException {
+        if (toBuild.isWinningCard() && !buildings.contains(BuildingType.FIREPLACE)) {
+            throw new GameException("need to build a fireplace first");
+        }
+        if (buildable().contains(toBuild)) {
+            for (DrawableCard dc : toBuild.getCost()) {
+                drawnCards.removeLastOccurrence(dc);
+            }
+            buildings.add(toBuild);
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 
+     * @return a list of buildable cards
+     */
+    public List<BuildingCard> buildable() {
+        List<BuildingCard> ret = new ArrayList<>();
+        for (BuildingCard toBuild : BuildingType.values()) {
+            boolean buildable = false;
+            Deque<DrawableCard> toCheck = new LinkedList<>(drawnCards); //copy the hands cards
+            for (DrawableCard dc : toBuild.getCost()) {
+                if (toCheck.contains(dc)) { //check if each card of the cost is in the hand
+                    toCheck.removeFirstOccurrence(dc);
+                    buildable = true;
+                } else {
+                    buildable = false;
+                    break;
+                }
+            }
+            if (buildable) {
+                if (toBuild.isWinningCard() && !buildings.contains(BuildingType.FIREPLACE)) { //winning cards need fire
+                    continue;
+                } else if (!buildings.contains(toBuild)) { //cards can only be built once
+                    ret.add(toBuild);
+                }
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Removes all cards if an encounter has been lost, or a catastrophe occurs
+     */
+    public void loseCards() {
+        if (containsShack()) {
+            Iterator<DrawableCard> iter = drawnCards.descendingIterator(); //start with the newest card
+            int i = 0;
+            while (iter.hasNext()) {
+                iter.next();
+                if (i >= BuildingCard.SHACK_SAVINGS) { //save the last 5 cards
+                    iter.remove();
+                }
+                i++;
+            }
+        } else {
+            drawnCards.clear();
+        }
+    }
+
+    /**
+     * 
+     * @return whether a shack has been built
+     */
+    public boolean containsShack() {
+        return buildings.stream().anyMatch(card -> card.isShack());
+    }
+
+    /**
+     * Removes the fireplace from the built cards, like in
+     */
+    public void removeFirePlace() {
+        buildings.remove(BuildingType.FIREPLACE);
     }
 
     /**
@@ -85,85 +160,10 @@ public class Hand {
     }
 
     /**
-     * Builds a building card, if have the resources
-     * @param toBuild The card to build
-     * @return true, if the card has been built, false if it can't be
-     * @throws GameException if you need to build a fireplace first
-     */
-    public boolean build(BuildingCard toBuild) throws GameException {
-        if (toBuild.isWinningCard() && !buildings.contains(BuildingType.FIREPLACE)) {
-            throw new GameException("need to build a fireplace first");
-        }
-        if (buildable().contains(toBuild)) {
-            for (DrawableCard dc : toBuild.getCost()) {
-                drawnCards.removeLastOccurrence(dc);
-            }
-            buildings.add(toBuild);
-            return true;
-        }
-        return false;
-    }
-
-    /**
      * 
-     * @return a list of buildable cards
+     * @return the last built card
      */
-    public List<BuildingCard> buildable() {
-        List<BuildingCard> ret = new ArrayList<>();
-        for (BuildingCard toBuild : BuildingType.values()) {
-            boolean buildable = false;
-            Deque<DrawableCard> toCheck = new LinkedList<>(drawnCards); // copy the hands cards
-            for (DrawableCard dc : toBuild.getCost()) {
-                if (toCheck.contains(dc)) {
-                    toCheck.removeFirstOccurrence(dc);
-                    buildable = true;
-                } else {
-                    buildable = false;
-                    break;
-                }
-            }
-            if (buildable) {
-                if (toBuild.isWinningCard() && !buildings.contains(BuildingType.FIREPLACE)) {
-                    continue;
-                } else if (!buildings.contains(toBuild)) { // cards can only be built once
-                    ret.add(toBuild);
-                }
-            }
-        }
-        return ret;
-    }
-
-    /**
-     * Removes all cards if an encounter has been lost, or a catastrophe occurs
-     */
-    public void loseCards() {
-        if (containsShack()) {
-            Iterator<DrawableCard> iter = drawnCards.descendingIterator();
-            int i = 0;
-            while (iter.hasNext()) {
-                iter.next();
-                if (i >= BuildingCard.SHACK_SAVINGS) {
-                    iter.remove();
-                }
-                i++;
-            }
-        } else {
-            drawnCards.clear();
-        }
-    }
-
-    /**
-     * 
-     * @return whether a shack has been built
-     */
-    public boolean containsShack() {
-        return buildings.stream().anyMatch(card -> card.isShack());
-    }
-
-    /**
-     * Removes the fireplace from the built cards, like in
-     */
-    public void removeFirePlace() {
-        buildings.remove(BuildingType.FIREPLACE);
+    public BuildingCard getLastBuilt() {
+        return buildings.getLast();
     }
 }

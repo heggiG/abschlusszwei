@@ -58,7 +58,7 @@ public enum DrawableType implements DrawableCard {
      * @param type     The cards type (instance)
      * @param following The gamestate that follows after this card is drawn
      */
-    private DrawableType(DrawableCard.Category category, String type, GameState following) {
+    private DrawableType(final DrawableCard.Category category, final String type, final GameState following) {
         this.category = category;
         this.type = type;
         this.dieSize = 0;
@@ -76,7 +76,9 @@ public enum DrawableType implements DrawableCard {
      * @param eyeCount The eye count needed to survive
      * @param following The gamestate that follows after
      */
-    private DrawableType(DrawableCard.Category category, String type, int dieSize, int eyeCount, GameState following) {
+    private DrawableType(final DrawableCard.Category category, final String type, final int dieSize, final int eyeCount,
+        final GameState following) {
+        
         this.category = category;
         this.type = type;
         this.dieSize = dieSize;

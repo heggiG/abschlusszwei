@@ -26,12 +26,12 @@ public class CardStack {
      * Sets up the cardstack with an input stack
      * @param setup The setup stack
      */
-    public CardStack(DrawableCard[] setup) {
+    public CardStack(final DrawableCard[] setup) {
         newGame(setup);
     }
     
     /**
-     * Resets the cardstack
+     * Creates a new game from a random cardstack
      */
     public void newGame() {
         cardStack = new LinkedList<>(CardUtility.getNewStack());
@@ -41,7 +41,7 @@ public class CardStack {
      * Starts a game from a given cardstack
      * @param input The cardstack to initialize from
      */
-    public void newGame(DrawableCard[] input) {
+    public void newGame(final DrawableCard[] input) {
         List<DrawableCard> list = Arrays.asList(input);
         cardStack = new LinkedList<DrawableCard>(list);
     }

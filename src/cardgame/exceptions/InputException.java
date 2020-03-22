@@ -21,7 +21,7 @@ public class InputException extends Exception {
      * Exception constructor with detail message
      * @param s Detail message
      */
-    public InputException(String s) {
+    public InputException(final String s) {
         super(s);
     }
 }

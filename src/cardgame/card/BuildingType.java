@@ -12,7 +12,7 @@ public enum BuildingType implements BuildingCard {
      * The axe card
      */
     AXE("axe", 2, new DrawableType[] {DrawableType.METAL, DrawableType.METAL, DrawableType.METAL}),
-
+                                      //all cards needed to build this card
     /**
      * The ballon card
      */
@@ -69,7 +69,7 @@ public enum BuildingType implements BuildingCard {
      * @param type The cards type
      * @param cost An array of cards needed to build this card
      */
-    private BuildingType(String type, int bonus, DrawableCard[] cost) {
+    private BuildingType(final String type, final int bonus, final DrawableCard[] cost) {
         this.cost = cost;
         this.type = type;
         this.bonus = bonus;
@@ -81,7 +81,7 @@ public enum BuildingType implements BuildingCard {
      * @param type The cards type
      * @param cost The cards cost
      */
-    private BuildingType(String type, DrawableCard[] cost) {
+    private BuildingType(final String type, final DrawableCard[] cost) {
         this.cost = cost;
         this.type = type;
         this.bonus = 0;
@@ -125,5 +125,4 @@ public enum BuildingType implements BuildingCard {
         }
         return false;
     }
-
 }

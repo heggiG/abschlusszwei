@@ -15,7 +15,7 @@ public enum GameState {
      * The scavenge gamestate, where a player needs to draw cards or build
      */
     SCAVENGE(new Commands[] {Commands.BUILD, Commands.DRAW, Commands.LISTRESOURCES, Commands.LISTBUILDINGS,
-        Commands.BUILDABLE, Commands.RESET}),
+        Commands.BUILDABLE, Commands.RESET}), //all the commands expected for this gamestate
 
     /**
      * The encounter gamestate where a player needs to fend off animals
@@ -39,7 +39,7 @@ public enum GameState {
 
     private Commands[] expectedInput;
 
-    private GameState(Commands[] expectedInput) {
+    private GameState(final Commands[] expectedInput) {
         this.expectedInput = expectedInput;
     }
 
@@ -56,7 +56,7 @@ public enum GameState {
      * @param input The command that has been triggered
      * @return Whether the command is expected or not
      */
-    public boolean isExpected(Commands input) {
+    public boolean isExpected(final Commands input) {
         if (input == Commands.QUIT) {
             return true;
         } else {

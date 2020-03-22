@@ -1,5 +1,7 @@
 package cardgame.ui;
 
+import java.util.regex.Pattern;
+
 import cardgame.core.GameSystem;
 import cardgame.exceptions.InputException;
 import edu.kit.informatik.Terminal;
@@ -12,6 +14,9 @@ import edu.kit.informatik.Terminal;
  */
 public final class Main {
 
+    private static final String GENERIC_COMM = "start|draw|build|rollD[468]|list-resources|list-buildings|reset"
+        + "|build\\?|quit";
+    
     /**
      * Private main class constructor
      */
@@ -29,8 +34,11 @@ public final class Main {
         Commands command = null;
         do {
             try {
-                command = Commands.runFitting(gameSystem, Terminal.readLine());
-                if (command == null) {
+                String input = Terminal.readLine();
+                command = Commands.runFitting(gameSystem, input);
+                if (command == null && Pattern.matches(GENERIC_COMM + "(\\s\\S)*", input)) {
+                    Terminal.printError("wrong parameters for given command");
+                } else if (command == null) {
                     Terminal.printError("unknown command");
                 }
             } catch (InputException e) {
